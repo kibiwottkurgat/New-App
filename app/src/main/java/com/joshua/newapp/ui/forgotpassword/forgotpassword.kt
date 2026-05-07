@@ -9,10 +9,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
 fun ForgotPasswordScreen(
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    modifier: Modifier,
+    navController: NavHostController
 ) {
     // State management for the text field
     var email by rememberSaveable { mutableStateOf("") }
@@ -25,24 +28,18 @@ fun ForgotPasswordScreen(
             .fillMaxSize()
     ) {
         // 1. Lottie Animation Placeholder
-        // Make sure you have the Lottie dependency and your JSON file in res/raw
         LottieAnimationWidget()
-
         Spacer(modifier = Modifier.height(24.dp))
-
         Text(
             text = "Forgot Password?",
             style = MaterialTheme.typography.headlineMedium
         )
-
         Text(
             text = "Enter your email address to receive a reset link.",
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(vertical = 8.dp)
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         // 2. Email Input
         OutlinedTextField(
             value = email,
@@ -58,7 +55,6 @@ fun ForgotPasswordScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         // 3. Submit Button
@@ -69,14 +65,12 @@ fun ForgotPasswordScreen(
         ) {
             Text(text = "Send Reset Link")
         }
-
         // 4. Navigation Buttons
         TextButton(onClick = onNavigateBack) {
             Text(text = "Back to Login")
         }
     }
 }
-
 @Composable
 fun LottieAnimationWidget() {
     Box(modifier = Modifier.size(200.dp), contentAlignment = Alignment.Center) {

@@ -6,7 +6,6 @@ import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.filled.Visibility
 //import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,10 +19,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.joshua.newapp.R
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     // Fixed: Added missing state variables
     var emailInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }

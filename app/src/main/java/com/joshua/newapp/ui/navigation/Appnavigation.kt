@@ -1,61 +1,33 @@
 package com.joshua.newapp.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.joshua.newapp.ui.registration.RegistrationScreen
-
-
-sealed class Screen(val route: String) {
-    data object Login : Screen("login")
-    data object Registration : Screen("registration")
-    data object Home : Screen("home")
-}
+import com.joshua.newapp.ui.forgotpassword.ForgotPasswordScreen
+import com.joshua.newapp.ui.login.LoginScreen
+import com.joshua.newapp.ui.signup.SignUpScreen
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-
+fun AppNavigation(
+    navController: NavHostController,
+    modifier: Modifier
+){
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route
-    ) {
-        composable(Screen.Login.route) {
-            LoginScreen(
-                onNavigateToRegister = {
-                    navController.navigate(Screen.Registration.route)
-                },
-                onLoginSuccess = {
-                    // Corrected the popUpTo logic to clear the backstack
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
-                    }
-                }
-            )
-        }
+        startDestination = ROUTES.Register.name
+    ){
+        composable(ROUTES.Login.name) { LoginScreen( navController= navController,modifier = modifier) }
+        composable(ROUTES.Register.name) { RegisterScreen( navController= navController,modifier = modifier) }
+        composable(ROUTES.ForgotPassword.name) { ForgotPasswordScreen( navController= navController,modifier = modifier) }
+        composable(ROUTES.Signup.name) { SignUpScreen( navController= navController,modifier = modifier) }
 
-        composable(Screen.Registration.route) {
-            RegistrationScreen(
-                onBackToLogin = {
-                    navController.popBackStack()
-                }
-            )
-        }
 
-        composable(Screen.Home.route) {
-            HomeScreen()
-        }
     }
 }
 
-
 @Composable
-fun LoginScreen(onNavigateToRegister: () -> Unit, onLoginSuccess: () -> Unit) {
-
-}
-
-@Composable
-fun HomeScreen() {
-
+fun RegisterScreen(navController: NavHostController, modifier: Modifier) {
+    TODO("Not yet implemented")
 }
