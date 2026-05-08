@@ -28,7 +28,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
     var emailInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }
     var isVisible by remember { mutableStateOf(false) }
-
+    val buttonModifier = Modifier
+        .fillMaxWidth()
+        .height(50.dp)
     val pagePadding = 24.dp
 
     Column(
@@ -42,7 +44,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             text = "Login To Get Started",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 10.dp)
         )
 
         Spacer(Modifier.height(8.dp))
@@ -63,7 +65,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
-
         // Password Input
         OutlinedTextField(
             value = passwordInput,
@@ -106,7 +107,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             ),
             singleLine = true
         )
-
         // Login Button
         Button(
             onClick = { /* Handle Login Logic */ },
@@ -116,7 +116,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
         ) {
             Text(text = "Login", fontSize = 16.sp)
         }
-
         // Footer Links
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             TextButton(onClick = { /* Handle Forgot Password */ }) {
