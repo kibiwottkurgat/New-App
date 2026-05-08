@@ -1,15 +1,13 @@
 package com.joshua.newapp.ui.booking
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -23,24 +21,29 @@ import java.util.*
 @Composable
 fun BookingScreen(navController: NavController) {
     // State for the form
-    var selectedService by remember { mutableStateOf("Consultation") }
+    var pickupLocation by remember { mutableStateOf("") }
+    var selectedCarType by remember { mutableStateOf("Sedan") }
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
 
-    // Lottie Animation setup (Using a remote URL or you can use a local JSON file)
+    // Lottie Animation setup (Car animation)
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.Url("https://assets10.lottiefiles.com/packages/lf20_9w9of9.json")
+        LottieCompositionSpec.Url("https://lottie.host/8077756f-22a3-4889-bc84-90439600a98b/f8o7GjY1Xy.json")
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Book an Appointment") },
+                title = { Text("Car Rental Booking", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             )
         }
     ) { innerPadding ->
@@ -52,42 +55,56 @@ fun BookingScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 1. Lottie Animation
+            // 1. Lottie Car Animation
             LottieAnimation(
                 composition = composition,
-                modifier = Modifier
-                    .size(200.dp)
-                    .padding(bottom = 16.dp),
+                modifier = Modifier.size(200.dp),
                 iterations = LottieConstants.IterateForever
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 2. Pickup Location Input
+            OutlinedTextField(
+                value = pickupLocation,
+                onValueChange = { pickupLocation = it },
+                label = { Text("Pickup Location") },
+                placeholder = { Text("Enter city or airport") },
+                modifier = Modifier.fillMaxWidth(),
+                leadingIcon = { Icon(Icons.Default.LocationOn, contentDescription = null) },
+                shape = MaterialTheme.shapes.medium
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 3. Car Type Selection
             Text(
-                text = "Select a Service",
+                text = "Select Car Type",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Start)
             )
+            val carTypes = listOf("Sedan", "SUV", "Luxury", "Audi")
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // 2. Service Selection (Segmented-like Buttons)
-            val services = listOf("Consultation", "Repair", "Training")
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                services.forEach { service ->
+                carTypes.forEach { type ->
                     FilterChip(
-                        selected = selectedService == service,
-                        onClick = { selectedService = service },
-                        label = { Text(service) },
-                        modifier = Modifier.weight(1f)
+                        selected = selectedCarType == type,
+                        onClick = { selectedCarType = type },
+                        label = { Text(type) },
+                        modifier = Modifier.weight(1f),
+                        leadingIcon = if (selectedCarType == type) {
+                            { Icon(Icons.Default.Check, contentDescription = null, Modifier.size(18.dp)) }
+                        } else null
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // 3. Date Selection Card
+            // 4. Date Selection Card
             OutlinedCard(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { showDatePicker = true }
@@ -99,45 +116,56 @@ fun BookingScreen(navController: NavController) {
                     Icon(Icons.Default.DateRange, contentDescription = null)
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
-                        Text("Appointment Date", fontWeight = FontWeight.Bold)
+                        Text("Pickup Date", fontWeight = FontWeight.Bold)
                         val selectedDate = datePickerState.selectedDateMillis?.let {
                             Date(it).toString().substring(0, 10)
-                        } ?: "Select a date"
+                        } ?: "Select date"
                         Text(text = selectedDate, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // 4. Submit Button
-            Button(
-                onClick = {
-                    // Handle booking logic here
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = MaterialTheme.shapes.medium
+            // 5. Price Summary Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
             ) {
-                Text("Confirm Booking", fontSize = 18.sp)
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Estimated Total:", fontWeight = FontWeight.Bold)
+                        Text("$120.00", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                    Text("Taxes and insurance included", style = MaterialTheme.typography.bodySmall)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 6. Submit Button
+            Button(
+                onClick = { /* Logic to process booking */ },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = MaterialTheme.shapes.large
+            ) {
+                Text("Confirm Car Booking", fontSize = 18.sp)
             }
         }
     }
 
-    // Material 3 Date Picker Dialog
+    // Date Picker Dialog Logic
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
-                TextButton(onClick = { showDatePicker = false }) {
-                    Text("OK")
-                }
+                TextButton(onClick = { showDatePicker = false }) { Text("OK") }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
-                }
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
             }
         ) {
             DatePicker(state = datePickerState)
