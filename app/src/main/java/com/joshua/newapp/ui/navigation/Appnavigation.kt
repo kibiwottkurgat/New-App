@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import com.joshua.newapp.ui.forgotpassword.ForgotPasswordScreen
 import com.joshua.newapp.ui.login.LoginScreen
 import com.joshua.newapp.ui.signup.SignUpScreen
+import com.joshua.newapp.ui.registration.RegistrationScreen
+
 
 @Composable
 fun AppNavigation(
@@ -22,12 +24,10 @@ fun AppNavigation(
         composable(ROUTES.Register.name) { RegisterScreen( navController= navController,modifier = modifier) }
         composable(ROUTES.ForgotPassword.name) { ForgotPasswordScreen( navController= navController,modifier = modifier) }
         composable(ROUTES.Signup.name) { SignUpScreen( navController= navController,modifier = modifier) }
-
-
     }
 }
 
 @Composable
 fun RegisterScreen(navController: NavHostController, modifier: Modifier) {
-    TODO("Not yet implemented")
+    TODO("implemented")
 }
